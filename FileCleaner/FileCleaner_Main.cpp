@@ -38,8 +38,19 @@ int main(int argc, char* argv[]) {
 	count = 0;
 	cout << "\nDirectory: " << p << endl;
 	cout << "Directory File Types: " << endl;
+	int fileSetSize = fileSet.size();
 	for (auto it = fileSet.begin(); it != fileSet.end(); ++it) {
-		cout << ++count << ") " << *it << "\t" << ++count << ") " << *++it << "\t" << ++count << ") " << *++it << endl;
+		cout << setw(10);
+			if (fileSetSize % 3 == 0)
+				cout << ++count << ") " << *it << "\t";
+			else if (fileSetSize % 2 == 0)
+				cout << ++count << ") " << *it << "\t";
+			else if (fileSetSize % 4 == 0)
+				cout << ++count << ") " << *it << "\t";
+			else
+				cout << ++count << ") " << *it << endl;
+		--fileSetSize;
+
 	}
 
 	cout << "\nFolder: " << p << endl;
