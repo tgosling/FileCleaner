@@ -38,22 +38,24 @@ int main(int argc, char* argv[]) {
 	count = 0;
 	cout << "\nDirectory: " << p << endl;
 	cout << "Directory File Types: " << endl;
-	int fileSetSize = fileSet.size();
-	for (auto it = fileSet.begin(); it != fileSet.end(); ++it) {
-		cout << setw(10);
-			if (fileSetSize % 3 == 0)
-				cout << ++count << ") " << *it << "\t";
-			else if (fileSetSize % 2 == 0)
-				cout << ++count << ") " << *it << "\t";
-			else if (fileSetSize % 4 == 0)
-				cout << ++count << ") " << *it << "\t";
-			else
-				cout << ++count << ") " << *it << endl;
-		--fileSetSize;
+	int fileSetSize = fileSet.size(), MaxValLngth = fileSet.begin()->size();
 
+	for (auto it = fileSet.begin(); it != fileSet.end(); ++it) {
+		if(it->size() > MaxValLngth)
+			MaxValLngth = it->size();
 	}
 
-	cout << "\nFolder: " << p << endl;
+
+	for (auto it = fileSet.begin(); it != fileSet.end(); ++it) {
+		
+		if (fileSetSize % 5 == 0)
+			cout << setw(3) << right << ++count <<  ") " << left << setw(MaxValLngth) << *it << endl;
+		else
+			cout << setw(3) << right << ++count << ") " << left << setw(MaxValLngth) << *it;
+		--fileSetSize;
+	}
+
+	cout << "\n\nFolder: " << p << endl;
 	cout << "What type of file would you like to remove?" << endl;
 
 	//get path and files to delete
