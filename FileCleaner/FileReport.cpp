@@ -5,6 +5,14 @@
 #include "file_report.hpp"
 
 using namespace std;
+using namespace filesystem;
+
+
+void dirCheck(std::set<std::string>& s, filesystem::path& p){
+	for (const auto& dirEntry : recursive_directory_iterator(p)) {
+		s.insert(dirEntry.path().extension().string());
+	}
+}
 
 void printRes(set<string>& s) {
 	int fileSetSize = s.size(), MaxValLngth = s.begin()->size(), count = 0;

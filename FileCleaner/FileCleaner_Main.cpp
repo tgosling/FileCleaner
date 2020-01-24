@@ -1,3 +1,8 @@
+/*!   /file: FileCleaner_Main.cpp
+*   /author: Tyler Gosling
+*	  /date: 23/01/2020
+*/
+
 #include <iostream>
 #include <Windows.h>
 #include <filesystem>
@@ -15,19 +20,13 @@ string getExePath() {
 	return string(result, GetModuleFileName(NULL, result, MAX_PATH));
 }
 
-void dirCheck(set<string>& s, filesystem::path p) {
-	for (const auto& dirEntry : recursive_directory_iterator(p)) {
-		s.insert(dirEntry.path().extension().string());
-	}
-}
-
 int main(int argc, char* argv[]) {
 	string usrPath, usrInput;
 	string fileType;
 	set<string> fileSet;
 
-	//prompt user
-	cout << "File Cleaner, 2020 (C)" << endl;
+	//prompt user for directory path
+	cout << "File Cleaner, 2020 (c)" << endl;
 	cout << "Which directory would you like to check? ";
 	cin >> usrPath;
 
@@ -44,16 +43,23 @@ int main(int argc, char* argv[]) {
 
 	int delCount = 0;
 	while (usrInput != "x") {
-		cout << "\nWhat type of file would you like to remove?" << endl;
-		cout << "Enter 'x' to end program, 'p' to print files again." << endl;
+		cout << "\nFile Cleaner options" << endl;
+		cout << "--------------------" << endl;
+		cout << "1) Enter File Type" << endl;
+		cout << "2) Enter 'reset' to reprint remaining files" << endl;
+		cout << "3) Enter 'x' to end program" << endl;
 		//get path and files to delete
 		cin >> usrInput;
 		cout << "\nYou selected " << usrInput << endl;
 		//printRes or find files and remove
-		if (usrInput == "p") {
+		if (usrInput == "reset") {
+			fileSet.clear();
+			dirCheck(fileSet, p);
 			printRes(fileSet);
 			cout << "\n";
 		}
+		else if (usrInput == "x")
+			cout << "Thanks for using File Cleaner, 2020 (c)" << endl;
 		else {
 			//iterate through directory to find files
 			for (const auto& dirEntry : recursive_directory_iterator(p)) {
