@@ -7,11 +7,19 @@
 using namespace std;
 using namespace filesystem;
 
-
 void dirCheck(std::set<std::string>& s, filesystem::path& p){
 	for (const auto& dirEntry : recursive_directory_iterator(p)) {
 		s.insert(dirEntry.path().extension().string());
 	}
+}
+
+int dirCheckCount(std::set<std::string>& s, filesystem::path& p) {
+	int count = 0;
+	for (const auto& dirEntry : recursive_directory_iterator(p)) {
+		++count;
+		s.insert(dirEntry.path().extension().string());
+	}
+	return count;
 }
 
 void printRes(set<string>& s) {

@@ -1,13 +1,13 @@
 /*!   /file: FileCleaner_Main.cpp
 *   /author: Tyler Gosling
 *	  /date: 23/01/2020
+   /purpose: 
 */
 
 #include <iostream>
 #include <Windows.h>
 #include <filesystem>
 #include <set>
-#include <map>
 #include <stdio.h>
 
 #include "file_report.hpp"
@@ -21,7 +21,7 @@ string getExePath() {
 }
 
 int main(int argc, char* argv[]) {
-	string usrPath, usrInput;
+	string usrPath, usrInput, usrConf;
 	string fileType;
 	set<string> fileSet;
 
@@ -33,22 +33,24 @@ int main(int argc, char* argv[]) {
 	//check directory for file types
 	filesystem::path p = usrPath;
 	dirCheck(fileSet, p);
-
+	int count = dirCheckCount(fileSet, p);
 	//print out directory extensions
 	cout << "\nDirectory: " << p << endl;
 	cout << "Directory File Types: " << endl;
 	printRes(fileSet);
-
-	cout << "\n\nFolder: " << p << endl;
+	cout << "\n\nTotal files found: " << count << endl;
+	cout << "Folder: " << p << endl;
 
 	int delCount = 0;
-	while (usrInput != "x") {
+	bool usrFlag = false;
+	while (usrFlag != true) {
 		cout << "\nFile Cleaner options" << endl;
 		cout << "--------------------" << endl;
-		cout << "1) Enter File Type" << endl;
+		cout << "1) Enter File Type to delete" << endl;
 		cout << "2) Enter 'reset' to reprint remaining files" << endl;
 		cout << "3) Enter 'x' to end program" << endl;
 		//get path and files to delete
+		cout << "Input: ";
 		cin >> usrInput;
 		cout << "\nYou selected " << usrInput << endl;
 		//printRes or find files and remove
@@ -58,19 +60,32 @@ int main(int argc, char* argv[]) {
 			printRes(fileSet);
 			cout << "\n";
 		}
-		else if (usrInput == "x")
-			cout << "Thanks for using File Cleaner, 2020 (c)" << endl;
+		else if (usrInput == "x"){
+			cout << "\nAre you sure you want to close File Cleaner? (Y/N)" << endl;
+			cout << "Input: ";
+			cin >> usrConf;
+			if (usrConf == "y") {
+				cout << "Thanks for using File Cleaner, 2020 (c)" << endl;
+				usrFlag = true;
+			}
+		}
 		else {
-			//iterate through directory to find files
-			for (const auto& dirEntry : recursive_directory_iterator(p)) {
-				//check for files
-				//if its a specified file, delete it
-				if (dirEntry.path().extension() == usrInput) {
-					cout << dirEntry.path().string() << endl;
-					remove(dirEntry);
-					++delCount;
-					if (remove(dirEntry) != 0)
-						cout << "Error deleting file" << endl;
+			cout << "File type selected: " << usrInput << endl;
+			cout << "Are you sure you want to delete all files of that type?" << endl;
+			cout << "Input: ";
+			cin >> usrConf;
+			if (usrConf == "y") {
+				//iterate through directory to find files
+				for (const auto& dirEntry : recursive_directory_iterator(p)) {
+					//check for files
+					//if its a specified file, delete it
+					if (dirEntry.path().extension() == usrInput) {
+						cout << dirEntry.path().string() << endl;
+						remove(dirEntry);
+						++delCount;
+						if (remove(dirEntry) != 0)
+							cout << "Error deleting file" << endl;
+					}
 				}
 			}
 			cout << "Files deleted: " << delCount << endl;

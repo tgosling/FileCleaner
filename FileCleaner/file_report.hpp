@@ -13,4 +13,6 @@ using namespace filesystem;
 
 void dirCheck(std::set<std::string>& s, filesystem::path& p);
 
+int dirCheckCount(std::set<std::string>& s, filesystem::path& p);
+
 void printRes(std::set<std::string>& s);
